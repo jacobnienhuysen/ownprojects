@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="Välkommen till Musikaliska och Estetiska Sektionen!">
+	<meta name="keywords" content="MES, sektion, DISK, musik, sång, teater, spex, rita, måla, film, dans, improvisera">
+	<meta name="author" content="Jacob Nienhuysen">
+	<link rel="stylesheet" type="text/css" href="messtil.css">
+	<title></title>
+</head>
+
+<body class="content">
+
+	<div id="page">
+		<h2>Kontakta oss</h2>
+		<p>Vill du gå med i MES eller veta mer om vår verksamhet? Maila oss genast!<br>
+		Du kan också gilla oss på Facebook för att hålla dig uppdaterad om våra spex och event.</p>
+					
+		<form action="mesmail.php" method="post">
+			<p><label for="namn">Namn:</label>
+			<input type="text" id="namn" name="namn" required autofocus></p>
+			<p><label for="mail">E-mail:</label>
+			<input type="email" id="mail" name="mail" required></p>
+	
+			<p>Meddelande:<br>
+			<textarea id="mess" name="mess" rows="5" cols="30" noresize required>Jag vill gå med i MES!
+			</textarea></p>
+					
+			<input type="submit" value="Skicka">
+			<input type="reset" value="Rensa">
+		</form>
+					
+	</div>
+
+</body>
+</html>

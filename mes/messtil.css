@@ -1,0 +1,140 @@
+body {
+		font-family: verdana, calibri, arial, helvetica, sans-serif;
+}
+
+body.content {	
+			background-color:#E4E9F2;
+	}
+	
+body.main{	
+			background-color:#FFFFCC;
+	}
+
+#wrapper{	
+			background-color:#BCE4F5;
+			width: 1000px;
+			margin: 0 auto;
+			border-radius: 10px;
+			padding:10px;
+			overflow:auto;
+			position:relative;
+		}	
+	
+	/* Sidhuvud */
+	
+#norr {	
+			margin-left: auto;
+			margin-right: auto;
+	}
+	
+img.toplogo{
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+	/* Naviagtionslisten */
+
+#navbar	{
+			width:100%;
+			margin-top:5px;
+		}
+	
+#navbar ul {	
+			list-style-type:none;
+			margin:0;
+			overflow:hidden;
+			text-align:center;
+		}
+
+#navbar li{	
+			margin-left: 5px;
+			border-radius: 5px;
+			float:left;
+			background-color:#64AFFF;
+		}
+
+#navbar a{	
+			color:#000000;
+			display:inline-block;
+			padding:10px;
+			text-decoration:none;
+		}
+	
+#navbar a:hover{
+			background-color:#D0E7FF;
+			border-radius: 5px;
+			text-decoration:none;
+		}
+	
+	/* Huvudfönstret */
+	
+#main	{
+			margin-top:10px;
+			margin-bottom:0px;
+		}
+
+	/* Huvudfönstret, vänster */	
+	
+#main-left	{
+			
+			float:left;
+			width:660px;
+			margin-bottom:10px;
+		}
+		
+#stage	{	
+			border-radius: 5px;
+			width:100%;
+			height:750px;
+			border:0px;
+		}
+
+	/* Huvudfönstret, höger */
+	
+#main-right	{
+			float:right;
+			padding:5px;
+			margin-bottom:5px;
+			border-radius: 5px;
+			background-color:#FFFFFF;
+			
+		}
+		
+		
+	/* Sidfot */
+	
+#south	{
+			padding:5px;
+			border-radius: 5px;
+			background-color:#FFFFFF;
+			font-size:small;
+			text-align:center;
+			margin-top:10px;
+			clear:both;
+		}
+		
+	/* Standardsidor */
+		
+#page	{	
+			padding:5px;
+			border-radius: 5px;
+		}
+
+#startpage	{
+			text-align:center;
+			font-size:x-large;
+			padding:5px;
+		}	
+
+img.page {
+			margin-top:5px;
+			margin-bottom:5px;
+			border-color:#000000;
+			border-width:1px;
+			border-style:solid;
+		}
+
+li.year {
+			font-weight:bold;
+		}		

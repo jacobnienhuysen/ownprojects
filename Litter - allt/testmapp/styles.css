@@ -1,0 +1,13 @@
+div.container {width: 800px; margin: 0px auto;}
+div.content {float: left;width: 800px;padding: 0px 0px 0px 0px; }
+div.header { margin:0px auto; background-color:#DE0000;box-shadow: 4px 4px 2px #888888; margin-bottom:3px;background-color:#FFFFFF; width:800px; height:80px;}
+div.menu {background-image:url('Pics/paper.gif');border:2px #000000; box-shadow: 3px 3px 2px #888888;
+height:600px; float:left; font-family:"verdana";color:#000000;margin-right:50px; width:150px; opacity:0.5;}
+div.profilbild {float:left; margin-top:17px;}
+div.presentation{font-family:"verdana"; font-size:12px; color:#000000; margin-top:10px;}
+div.userinfo{font-family:"verdana"; font-size:15px; color:#000000; margin-top:12px; margin-bottom:30px;}
+div.rubrik1{font-family:"georgia"; font-size:20px; font-weight:bold;}
+div.rubrik2{font-family:"georgia"; font-size:18px; font-weight:bold;}
+div.footer{background-color:#FFFFFF;clear:both;text-align:center; width:800px; margin-top:10px;box-shadow: 0px 4px 2px; font-family:"verdana";}
+div.logo{}
+div.line{}

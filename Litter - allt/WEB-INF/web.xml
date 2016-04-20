@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+
+   PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+   <servlet-mapping>
+
+    <servlet-name>FileUploadDBServlet</servlet-name>
+
+    <url-pattern>/uploadServlet</url-pattern>
+
+ </servlet-mapping>
+ 
+    <servlet-mapping>
+
+    <servlet-name>CoverUploadDBServlet</servlet-name>
+
+    <url-pattern>/CoverUploadServlet</url-pattern>
+
+ </servlet-mapping>
+ 
+     <servlet-mapping>
+
+    <servlet-name>PDFUploadDBServlet</servlet-name>
+
+    <url-pattern>/PDFUploadServlet</url-pattern>
+
+ </servlet-mapping>
+ 
+ 	<servlet>
+		<servlet-name>EmailServlet</servlet-name>
+		<servlet-class>EmailServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmailServlet</servlet-name>
+		<url-pattern>/EmailServlet</url-pattern>
+	</servlet-mapping>
+ 
+      <servlet-mapping>
+
+    <servlet-name>uploadCirclePicServlet</servlet-name>
+
+    <url-pattern>/CirclePicServlet</url-pattern>
+
+ </servlet-mapping>
+</web-app>

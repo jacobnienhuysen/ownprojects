@@ -1,0 +1,14 @@
+a:link {color : #000000; text-decoration : none;}
+a:visited {color : #000000; text-decoration : none;}
+a:hover {color : #000000; text-decoration : underline;}
+
+body.index {background-color : #e2d9ca; background-image:url('pix/stones.jpg'); background-repeat:no-repeat; background-attachment:fixed; background-position:left; text-align:center;}
+
+div.annons{margin-left:10px; margin-top:10px; margin-right:10px; position: absolute; min-width:800px; overflow:hidden;}
+div.title {font-family : georgia; text-align:left; font-size:24px; width:100%}
+div.pic{float:left; padding:5px; margin-right:5px; width:200px;}
+div.right{float:right; padding:5px; margin-right:5px; width:570px; position: relative;display:block;}
+div.price{font-family : georgia; text-align:left; font-size : 18px; margin-bottom:10px; background-color: #f4f1eb; padding:5px; border-style:dashed; border-color:#b3b3b3; border-width:1px;}
+div.comment{font-family : georgia; text-align:left; font-size : 14px; margin-bottom:10px; background-color: #f4f1eb; padding:5px; border-style:dashed; border-color:#b3b3b3; border-width:1px;}
+div.info{font-family : georgia; text-align:left; font-size : 14px; margin-bottom:10px; background-color: #f4f1eb; padding:5px; border-style:dashed; border-color:#b3b3b3; border-width:1px;}
+div.data{font-family : georgia; text-align:left; font-size : 14px; margin-bottom:10px; background-color: #f4f1eb; padding:5px; margin-right:5px; margin-left:5px;border-style:dashed; border-color:#b3b3b3; border-width:1px; clear:both;}
