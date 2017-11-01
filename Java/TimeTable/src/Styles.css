@@ -1,0 +1,12 @@
+.root {
+    -fx-font-size: 12pt;
+
+}
+
+#sessionStartCol, #sessionEndCol, #sessionDurationCol {
+    -fx-alignment: CENTER;
+}
+
+#bottomBox {
+    -fx-font-size: 10pt;
+}
