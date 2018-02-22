@@ -1,0 +1,243 @@
+body	{
+	background:#000;
+	font-family: "Book Antiqua", Georgia, Times, Serif;
+}
+
+a, a:hover, a:active, a:visited	{
+	text-decoration:none;
+	color:#fff;
+}
+
+#wrapper	{
+	width:100%;
+	
+	margin: 0 auto;
+	padding:0.5em;
+	overflow:hidden;
+}
+
+/* Splash screen */
+
+#splash	{
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	z-index:99;
+	background-color:black;
+}
+
+#splash img	{
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+	width:75%;
+}
+
+/* Menyruta */
+
+#menu	{
+	background-color:#000;
+	color:#fff;
+	opacity:0.9;
+	
+	font-size:1.3em;
+	
+	min-width:250px;
+	border-radius:15px;
+	box-shadow: 8px 0 8px -8px #CCC, 0 8px 8px -8px #CCC, -8px 0 8px -8px #CCC;
+	
+	margin-left:0.5em;
+	margin-top:0.5em;
+	
+	float:left;
+	display:none;
+}
+
+.menulist{
+	margin-top:0;
+	padding-left:1em;
+	list-style-type:none;
+}
+
+.sublist{
+	margin-top:0.2em;
+	padding-left:1em;
+	list-style-type:none;
+}
+
+#menu, li{
+	margin-bottom:0.15em;
+}
+
+
+li.sub	{
+	display:none;
+	font-size:0.8em;
+	padding-left:1.3em;
+	
+}
+
+li.last	{
+	margin-bottom:0.5em;
+}
+
+
+/* Innehållsfönster */
+
+#content	{
+	background-color:#000;
+	color:#fff;
+	opacity:0.9;
+	
+	border-radius:15px;
+	box-shadow: 8px 0 8px -8px #CCC, 0 8px 8px -8px #CCC, -8px 0 8px -8px #CCC;
+
+	margin-top:0.5em;
+	margin-left:2em;
+	margin-right:0.5em;
+	padding:1em;
+	
+	width:100%;
+	max-width:800px;
+	
+	overflow:hidden;
+	display:none;
+	float:left;
+}
+
+#lyricMenu	{
+	display:none;
+	width:100%;
+	
+	padding:0;
+	margin:0;
+}
+
+#lyricHolder	{
+	display:none;
+	width:100%;
+	
+	padding:0;
+	margin:0;
+}
+
+
+/* Innehåll */
+
+div.filler	{
+	display:none;
+}
+
+h2.filler_head	{
+	font-size:1.5em;
+}
+
+ul.titles	{
+	margin-top:0;
+	padding-left:1em;
+	list-style-type:none;
+	font-size:1.2em;
+}
+
+ul.event{
+	margin-bottom:0.15em;
+}
+
+
+li.song	{
+	font-size:0.9em;
+	padding-left:0.2em;
+	list-style-type:circle;
+}
+
+li.song:last-child {
+    margin-bottom:1.5em;
+}
+
+img.profile-pic	{
+	border-radius:8px;
+	float:left;
+	border: 1px solid #888;
+	margin-right:2em;
+	max-height:250px;
+}
+
+table, td, th .profile-text	{
+	vertical-align:top;
+	color:#FFF;
+}
+
+td.what	{
+	font-weight:bold;
+	text-align:right;
+	padding-right:1em;
+}
+
+#profile_poem	{
+	margin-top:1.5em;
+	text-align:center;
+	width:75%;
+}
+
+/* Formulär */
+
+div.form-item	{
+	margin:0.5em;
+	padding:0.1em;
+}
+
+label, input, textarea	{
+	font-family: "Book Antiqua", Georgia, Times, Serif;
+	border-radius:4px;
+	display:block;
+}
+
+input, textarea	{
+	font-size:1.2em;
+	width:75%;
+	margin-bottom:0.6em;
+	padding:5px;
+}
+
+textarea	{
+	width:75%;
+	height:100px;
+	resize:none;
+}
+
+input[type=submit]{
+	width:25%;
+}
+	
+/* Bakgrundsbilder */
+
+#bgimage	{
+	position:fixed;
+	left:0px;
+	top:0px;
+	width:100%;
+	opacity:0.8;
+	display:none;
+}
+
+#texture	{
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0px;
+	left:0px;
+	background:transparent url(images/pattern.png) repeat top left;
+}
+
+span.close {
+	float:right;
+    margin-top: 10px;
+	margin-right: 10px;
+    width: 11px;
+    height: 12px;
+    cursor: pointer;
+    background: transparent url("images/close.png") no-repeat top left;
+    
+}

@@ -1,0 +1,18 @@
+p.mel	{
+	font-style:italic;
+	margin-top:0;
+}
+
+#comment	{
+	clear:both;
+	width:100%;
+	border-top-color:#888888;
+	border-top:1px;
+	border-top-style:solid;
+	font-size:0.9em;
+}
+
+#comment h4	{
+	margin-bottom:0.3em;
+	margin-top:0.3em;
+}
