@@ -3,13 +3,9 @@ public class Bottle {
     private final int SIZE;
     private int content;
 
-    public Bottle(int size){
-        this(size, 0);
-    }
-
     public Bottle(int size, int content){
         this.SIZE = size;
-        this.content =  content;
+        this.content = content;
     }
 
     public int getSize(){
@@ -20,12 +16,8 @@ public class Bottle {
         return content;
     }
 
-    public boolean isEmpty(){
-        return content == 0;
-    }
-
-    public boolean isFull(){
-        return content == SIZE;
+    public String toString(){
+        return (SIZE + "-litersflaska som innehåller " + content + " liter vatten.");
     }
 
 }
