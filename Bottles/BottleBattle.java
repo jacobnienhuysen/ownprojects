@@ -1,15 +1,21 @@
-import javax.lang.model.type.ArrayType;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BottleBattle {
 
     private ArrayList<State> stateList = new ArrayList<>();
     private int stepCounter = 0;
+    private State currentState = null;
 
     private final int BOTTLE_A_SIZE = 3;
     private final int BOTTLE_B_SIZE = 5;
 
     public static void main(String[] args){
+
+        int wanted = 1;
 
         BottleBattle bottleBattle = new BottleBattle();
 
@@ -17,8 +23,10 @@ public class BottleBattle {
         bottleBattle.stateList.add(temp);
         bottleBattle.evaluate(temp);
 
-        System.out.println(bottleBattle.stateList);
-        System.out.println(bottleBattle.stateList.size());
+        ArrayList<State> result = bottleBattle.shortestPathTo(wanted);
+
+        System.out.println(result);
+
     }
 
     private State init(){
@@ -38,7 +46,7 @@ public class BottleBattle {
         Bottle tempA = state.getBottleA();
         Bottle tempB = state.getBottleB();
 
-        ArrayList<State> previousSteps = new ArrayList<>(state.getSteps());
+        //State previousStep = state.getPreviousStep();
 
         //Kolla först kombinationen A-B
 
@@ -46,7 +54,7 @@ public class BottleBattle {
         if(tempA.getContent() != 0){
 
             //Töm i badkaret, dvs. skapa nytt state
-            createState(new Bottle(tempA.getSize(), 0),tempB, previousSteps);
+            createState(new Bottle(tempA.getSize(), 0),tempB, state);
 
             //Om flaska B inte är full, fyll på från A
             if(tempB.getContent() != tempB.getSize()){
@@ -56,18 +64,18 @@ public class BottleBattle {
                 //Allt vatten får inte plats i flaska B
                 if(totalAmount > tempB.getSize()){
                     int leftInA = totalAmount - tempB.getSize();
-                    createState(new Bottle(tempA.getSize(), leftInA), new Bottle(tempB.getSize(), tempB.getSize()), previousSteps);
+                    createState(new Bottle(tempA.getSize(), leftInA), new Bottle(tempB.getSize(), tempB.getSize()), state);
                 }
                 //Allt vatten får plats i flaska B
                 else{
-                    createState(new Bottle(tempA.getSize(),0), new Bottle(tempB.getSize(), state.getCurrentContent()), previousSteps);
+                    createState(new Bottle(tempA.getSize(),0), new Bottle(tempB.getSize(), state.getCurrentContent()), state);
                 }
             }
         }
 
         //Om flaska A inte är full
         if(tempA.getContent() != tempA.getSize()){
-            createState(new Bottle(tempA.getSize(), tempA.getSize()), new Bottle(tempB.getSize(), tempB.getContent()), previousSteps);
+            createState(new Bottle(tempA.getSize(), tempA.getSize()), new Bottle(tempB.getSize(), tempB.getContent()), state);
         }
 
         //Kolla först kombinationen B-A
@@ -76,7 +84,7 @@ public class BottleBattle {
         if(tempB.getContent() != 0){
 
             //Töm i badkaret, dvs. skapa nytt state
-            createState(tempA, new Bottle(tempB.getSize(), 0), previousSteps);
+            createState(tempA, new Bottle(tempB.getSize(), 0), state);
 
             //Om flaska A inte är full, fyll på från B
             if(tempA.getContent() != tempA.getSize()){
@@ -86,37 +94,31 @@ public class BottleBattle {
                 //Allt vatten får inte plats i flaska A
                 if(totalAmount > tempA.getSize()){
                     int leftInB = totalAmount - tempA.getSize();
-                    createState(new Bottle(tempA.getSize(), tempA.getSize()), new Bottle(tempB.getSize(), leftInB), previousSteps);
+                    createState(new Bottle(tempA.getSize(), tempA.getSize()), new Bottle(tempB.getSize(), leftInB), state);
                 }
                 //Allt vatten får plats i flaska A
                 else{
-                    createState(new Bottle(tempA.getSize(),state.getCurrentContent()), new Bottle(tempB.getSize(), 0), previousSteps);
+                    createState(new Bottle(tempA.getSize(),state.getCurrentContent()), new Bottle(tempB.getSize(), 0), state);
                 }
             }
         }
 
         //Om flaska B inte är full
         if(tempB.getContent() != tempB.getSize()){
-            createState(new Bottle(tempA.getSize(), tempA.getContent()), new Bottle(tempB.getSize(), tempB.getSize()), previousSteps);
+            createState(new Bottle(tempA.getSize(), tempA.getContent()), new Bottle(tempB.getSize(), tempB.getSize()), state);
         }
 
     }
 
 
-    private void createState(Bottle bottleA, Bottle bottleB, ArrayList<State> previousSteps){
-
-        State tempState = new State(bottleA, bottleB);
-        tempState.getSteps().addAll(previousSteps);
-
+    private void createState(Bottle bottleA, Bottle bottleB, State previousStep){
 
         if(!stateExists(bottleA.getContent(), bottleB.getContent())){
+            State tempState = new State(bottleA, bottleB);
+            tempState.setPreviousStep(previousStep);
             stateList.add(tempState);
+            evaluate(tempState);
         }
-        else{
-            tempState.addStep(tempState);
-        }
-
-        evaluate(tempState);
     }
 
 
@@ -130,4 +132,54 @@ public class BottleBattle {
 
         return false;
     }
+
+
+    private ArrayList<State> shortestPathTo(int wantedAmount){
+
+        //Routes, keys are result states and the arraylist contains all steps
+        HashMap<State, ArrayList<State>> alternativeRoutes = new HashMap<>();
+
+        for(State state : stateList){
+
+            //If state has wanted amount of water, count the steps
+            if(state.getCurrentContent() == wantedAmount){
+                alternativeRoutes.put(state, new ArrayList<>());
+
+                State previousStep = state.getPreviousStep();
+
+                //Go to previous step until you get to start state
+                while(previousStep != null){
+                    alternativeRoutes.get(state).add(previousStep);
+                    previousStep = previousStep.getPreviousStep();
+                }
+
+            }
+        }
+
+        if(!alternativeRoutes.isEmpty()) {
+
+            ArrayList<State> shortestRoute = new ArrayList<>();
+            int shortest = Integer.MAX_VALUE;
+
+            for (Map.Entry<State, ArrayList<State>> route : alternativeRoutes.entrySet()) {
+
+                //Get length of current route
+                int routeLength = route.getValue().size();
+
+                //If shorter than previous, save route
+                if (routeLength < shortest && routeLength != 0) {
+                    shortestRoute = route.getValue();
+                }
+
+            }
+
+            //Flip list so path starts from beginning
+            Collections.reverse(shortestRoute);
+
+            return shortestRoute;
+        }
+
+        return null;
+    }
+
 }

@@ -4,12 +4,12 @@ public class State {
 
     private Bottle bottleA;
     private Bottle bottleB;
-    private ArrayList<State> steps;
+    private State previousStep;
 
     public State(Bottle bottleA, Bottle bottleB){
         this.bottleA = bottleA;
         this.bottleB = bottleB;
-        this.steps = new ArrayList<>();
+        this.previousStep = null;
     }
 
 
@@ -33,17 +33,17 @@ public class State {
         return getBottleAContent()+getBottleBContent();
     }
 
-    public ArrayList<State> getSteps(){
-        return steps;
+    public State getPreviousStep(){
+        return previousStep;
     }
 
-    public void addStep(State step){
-        steps.add(step);
+    public void setPreviousStep(State step){
+        previousStep = step;
     }
 
     public String toString(){
 
-        return "[" + bottleA.getContent() + ", " + bottleB.getContent() + "], " + steps.size() + " steg\n";
+        return "[" + bottleA.getContent() + ", " + bottleB.getContent() + "]";
 
     }
 
