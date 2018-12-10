@@ -1,48 +1,22 @@
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BottleBattle {
-
-    private ArrayList<State> stateList = new ArrayList<>();
-    private int stepCounter = 0;
-    private State currentState = null;
 
     private final int BOTTLE_A_SIZE = 3;
     private final int BOTTLE_B_SIZE = 5;
 
-    public static void main(String[] args){
+    private ArrayList<State> stateList = new ArrayList<>();
 
-        int wanted = 1;
 
-        BottleBattle bottleBattle = new BottleBattle();
+    private void run(String wanted){
 
-        State temp = bottleBattle.init();
-        bottleBattle.stateList.add(temp);
-        bottleBattle.evaluate(temp);
-
-        ArrayList<State> result = bottleBattle.shortestPathTo(wanted);
-
-        System.out.println(result);
+        int wantedAmount = Integer.parseInt(wanted);
 
     }
-
-    private State init(){
-
-        stateList.clear();
-
-        Bottle b1 = new Bottle(BOTTLE_A_SIZE, 0);
-        Bottle b2 = new Bottle(BOTTLE_B_SIZE, 0);
-
-        return new State(b1,b2);
-    }
-
 
 
     private void evaluate(State state){
-
+n b
         Bottle tempA = state.getBottleA();
         Bottle tempB = state.getBottleB();
 
@@ -73,10 +47,7 @@ public class BottleBattle {
             }
         }
 
-        //Om flaska A inte är full
-        if(tempA.getContent() != tempA.getSize()){
-            createState(new Bottle(tempA.getSize(), tempA.getSize()), new Bottle(tempB.getSize(), tempB.getContent()), state);
-        }
+
 
         //Kolla först kombinationen B-A
 
@@ -111,17 +82,21 @@ public class BottleBattle {
     }
 
 
-    private void createState(Bottle bottleA, Bottle bottleB, State previousStep){
+
+    //Creates new state if not already in list, and returns true. Otherwise returns false
+    private boolean createState(Bottle bottleA, Bottle bottleB, State previousStep){
 
         if(!stateExists(bottleA.getContent(), bottleB.getContent())){
             State tempState = new State(bottleA, bottleB);
             tempState.setPreviousStep(previousStep);
             stateList.add(tempState);
-            evaluate(tempState);
+            return true;
         }
+
+        return false;
     }
 
-
+    //Check if state is already in list
     private boolean stateExists(int bottleAContent, int bottleBContent){
 
         for(State state : stateList){
@@ -134,52 +109,14 @@ public class BottleBattle {
     }
 
 
-    private ArrayList<State> shortestPathTo(int wantedAmount){
 
-        //Routes, keys are result states and the arraylist contains all steps
-        HashMap<State, ArrayList<State>> alternativeRoutes = new HashMap<>();
+    // Main method
+    public static void main(String[] args){
 
-        for(State state : stateList){
+        BottleBattle bottleBattle = new BottleBattle();
 
-            //If state has wanted amount of water, count the steps
-            if(state.getCurrentContent() == wantedAmount){
-                alternativeRoutes.put(state, new ArrayList<>());
+        bottleBattle.run(args[0]);
 
-                State previousStep = state.getPreviousStep();
-
-                //Go to previous step until you get to start state
-                while(previousStep != null){
-                    alternativeRoutes.get(state).add(previousStep);
-                    previousStep = previousStep.getPreviousStep();
-                }
-
-            }
-        }
-
-        if(!alternativeRoutes.isEmpty()) {
-
-            ArrayList<State> shortestRoute = new ArrayList<>();
-            int shortest = Integer.MAX_VALUE;
-
-            for (Map.Entry<State, ArrayList<State>> route : alternativeRoutes.entrySet()) {
-
-                //Get length of current route
-                int routeLength = route.getValue().size();
-
-                //If shorter than previous, save route
-                if (routeLength < shortest && routeLength != 0) {
-                    shortestRoute = route.getValue();
-                }
-
-            }
-
-            //Flip list so path starts from beginning
-            Collections.reverse(shortestRoute);
-
-            return shortestRoute;
-        }
-
-        return null;
     }
 
 }
