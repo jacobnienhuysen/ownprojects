@@ -2,83 +2,95 @@ import java.util.ArrayList;
 
 public class BottleBattle {
 
-    private final int BOTTLE_A_SIZE = 3;
-    private final int BOTTLE_B_SIZE = 5;
+    private final int BOTTLE_A_SIZE = 5;
+    private final int BOTTLE_B_SIZE = 3;
+
+    private int wantedAmount = 0;
 
     private ArrayList<State> stateList = new ArrayList<>();
 
 
     private void run(String wanted){
 
-        int wantedAmount = Integer.parseInt(wanted);
+        wantedAmount = Integer.parseInt(wanted);
+
+    }
+
+    private State init(){
+
+        Bottle a = new Bottle(BOTTLE_A_SIZE, 0);
+        Bottle b = new Bottle(BOTTLE_B_SIZE, 0);
+
+        return new State(a, b);
+    }
+
+
+    private void evaluateFirstRound(State state){
+
+        //Add empty state to list
+        stateList.add(state);
+
+        //Fill first bucket
+        State firstStep = new State(new Bottle(BOTTLE_A_SIZE, BOTTLE_A_SIZE), new Bottle(BOTTLE_B_SIZE));
+        stateList.add(firstStep);
+
+        //Fill second bucket from first
+        State secondStep = stepTwo(firstStep);
+        stateList.add(secondStep);
+
+        if(secondStep.getBottleAContent() == wantedAmount || secondStep.getBottleBContent() == wantedAmount){
+            //bryt
+        }
+
+        //If bottle B is full, empty in bottle A
+        if(secondStep.getBottleBContent() == secondStep.getBottleB().getSize()){
+
+            State thirdStep = stepThree(secondStep);
+            stateList.add(thirdStep);
+        }
 
     }
 
 
-    private void evaluate(State state){
-n b
-        Bottle tempA = state.getBottleA();
-        Bottle tempB = state.getBottleB();
+    //Step two
+    //Fill bottle B from bottle A
+    private State stepTwo(State firstStep){
 
-        //State previousStep = state.getPreviousStep();
+        State secondStep = null;
 
-        //Kolla först kombinationen A-B
+        int spaceInSecondBucket = firstStep.getBottleB().getSize() - firstStep.getBottleBContent();
+        if(firstStep.getBottleAContent() > spaceInSecondBucket){
 
-        //Om flaska A inte är tom, töm i badkaret
-        if(tempA.getContent() != 0){
+            int leftInFirstBucket = firstStep.getBottleAContent() - spaceInSecondBucket;
 
-            //Töm i badkaret, dvs. skapa nytt state
-            createState(new Bottle(tempA.getSize(), 0),tempB, state);
-
-            //Om flaska B inte är full, fyll på från A
-            if(tempB.getContent() != tempB.getSize()){
-
-                int totalAmount = state.getCurrentContent();
-
-                //Allt vatten får inte plats i flaska B
-                if(totalAmount > tempB.getSize()){
-                    int leftInA = totalAmount - tempB.getSize();
-                    createState(new Bottle(tempA.getSize(), leftInA), new Bottle(tempB.getSize(), tempB.getSize()), state);
-                }
-                //Allt vatten får plats i flaska B
-                else{
-                    createState(new Bottle(tempA.getSize(),0), new Bottle(tempB.getSize(), state.getCurrentContent()), state);
-                }
-            }
+            secondStep = new State(new Bottle(BOTTLE_A_SIZE, leftInFirstBucket), new Bottle(BOTTLE_B_SIZE, BOTTLE_B_SIZE));
+        }
+        else{
+            secondStep = new State(new Bottle(BOTTLE_A_SIZE), new Bottle(BOTTLE_B_SIZE, firstStep.getBottleAContent()));
         }
 
+        return secondStep;
+    }
 
 
-        //Kolla först kombinationen B-A
+    //Step three
+    //If bottle B is full, empty it and fill from bottöe A
+    private State stepThree(State secondStep){
 
-        //Om flaska B inte är tom, töm i badkaret
-        if(tempB.getContent() != 0){
+        State thirdStep = null;
 
-            //Töm i badkaret, dvs. skapa nytt state
-            createState(tempA, new Bottle(tempB.getSize(), 0), state);
+        int spaceInBottleA = secondStep.getBottleA().getSize() - secondStep.getBottleAContent();
+        int leftInBottleB = secondStep.getBottleBContent() - spaceInBottleA;
 
-            //Om flaska A inte är full, fyll på från B
-            if(tempA.getContent() != tempA.getSize()){
-
-                int totalAmount = state.getCurrentContent();
-
-                //Allt vatten får inte plats i flaska A
-                if(totalAmount > tempA.getSize()){
-                    int leftInB = totalAmount - tempA.getSize();
-                    createState(new Bottle(tempA.getSize(), tempA.getSize()), new Bottle(tempB.getSize(), leftInB), state);
-                }
-                //Allt vatten får plats i flaska A
-                else{
-                    createState(new Bottle(tempA.getSize(),state.getCurrentContent()), new Bottle(tempB.getSize(), 0), state);
-                }
-            }
+        if(leftInBottleB > 0){
+            thirdStep = new State(new Bottle(BOTTLE_A_SIZE, BOTTLE_A_SIZE), new Bottle(BOTTLE_B_SIZE, leftInBottleB));
+        }
+        else{
+            int newBContent = secondStep.getBottleAContent() + secondStep.getBottleBContent()
+            thirdStep = new State(new Bottle(BOTTLE_A_SIZE, newBContent), new Bottle(BOTTLE_B_SIZE, 0));
         }
 
-        //Om flaska B inte är full
-        if(tempB.getContent() != tempB.getSize()){
-            createState(new Bottle(tempA.getSize(), tempA.getContent()), new Bottle(tempB.getSize(), tempB.getSize()), state);
-        }
-
+        return thirdStep;
     }
 
 
@@ -88,8 +100,7 @@ n b
 
         if(!stateExists(bottleA.getContent(), bottleB.getContent())){
             State tempState = new State(bottleA, bottleB);
-            tempState.setPreviousStep(previousStep);
-            stateList.add(tempState);
+            tempState.addStep(previousStep);
             return true;
         }
 
@@ -115,7 +126,11 @@ n b
 
         BottleBattle bottleBattle = new BottleBattle();
 
-        bottleBattle.run(args[0]);
+        String wanted = "1";
+
+        bottleBattle.run(wanted);
+
+        //bottleBattle.run(args[0]);
 
     }
 
