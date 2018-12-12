@@ -1,5 +1,12 @@
 import java.util.ArrayList;
 
+/**
+ * TODO 1: Se till att alla steg räknas korrekt. Glöm inte hällningar från en flaska till en annan i steg 4!
+ * TODO 2: Kör båda alogritmerna efter varandra och returnera den med kortast väg!
+ * TODO 3: Strukturera och kommentera!
+ *
+ */
+
 public class BottleBattle {
 
     private final int BOTTLE_A_SIZE = 5;
@@ -7,118 +14,156 @@ public class BottleBattle {
 
     private int wantedAmount = 0;
 
-    private ArrayList<State> stateList = new ArrayList<>();
-
+    private ArrayList<State> stepList = new ArrayList<>();
 
     private void run(String wanted){
 
         wantedAmount = Integer.parseInt(wanted);
 
+        System.out.println("Jag vill ha " + wanted);
+
+        evaluate(init(true));
+
+        //evaluateSecondRound(init(false));
+
     }
 
-    private State init(){
+    private State init(boolean firstRound){
+
+        stepList.clear();
 
         Bottle a = new Bottle(BOTTLE_A_SIZE, 0);
         Bottle b = new Bottle(BOTTLE_B_SIZE, 0);
 
-        return new State(a, b);
+        if(firstRound){
+            return new State(a, b);
+        }
+        else{
+            return new State(b, a);
+        }
     }
 
 
-    private void evaluateFirstRound(State state){
+    private void evaluate(State state){
 
-        //Add empty state to list
-        stateList.add(state);
+        //Step one
+        //Fill first bucket if empty
+        State firstStep = stepOne(state);
+        addStep(firstStep);
 
-        //Fill first bucket
-        State firstStep = new State(new Bottle(BOTTLE_A_SIZE, BOTTLE_A_SIZE), new Bottle(BOTTLE_B_SIZE));
-        stateList.add(firstStep);
-
+        //Step two
         //Fill second bucket from first
         State secondStep = stepTwo(firstStep);
-        stateList.add(secondStep);
+        addStep(secondStep);
 
+        //Step three
+        //Break if we have got the amount we want
         if(secondStep.getBottleAContent() == wantedAmount || secondStep.getBottleBContent() == wantedAmount){
-            //bryt
+            System.out.println("Klar! " + stepList.size() + " steg.");
+
+            System.out.println(stepList);
         }
+        else {
 
-        //If bottle B is full, empty in bottle A
-        if(secondStep.getBottleBContent() == secondStep.getBottleB().getSize()){
+            //Step four
+            //If bottle B is full, empty it and transfer water from A
+            State fourthStep = secondStep;
+            if (fourthStep.getBottleBContent() == fourthStep.getBottleB().getSize()) {
 
-            State thirdStep = stepThree(secondStep);
-            stateList.add(thirdStep);
+                fourthStep = stepFour(secondStep);
+
+            }
+
+            addStep(fourthStep);
+            evaluate(fourthStep);
         }
 
     }
+
+
+    //Step one
+    //If bottle A is empty, fill A, otherwise return state as is
+    private State stepOne(State step){
+
+        Bottle bottleA = step.getBottleA();
+        Bottle bottleB = step.getBottleB();
+
+        if(bottleA.getContent() == 0) {
+            return new State(new Bottle(bottleA.getSize(), bottleA.getSize()), bottleB);
+        }
+        else{
+            return step;
+        }
+
+    }
+
 
 
     //Step two
-    //Fill bottle B from bottle A
-    private State stepTwo(State firstStep){
+    //Transfer water from bottle a to bottle b
+    private State stepTwo(State step){
 
-        State secondStep = null;
+        Bottle bottleA = step.getBottleA();
+        Bottle bottleB = step.getBottleB();
 
-        int spaceInSecondBucket = firstStep.getBottleB().getSize() - firstStep.getBottleBContent();
-        if(firstStep.getBottleAContent() > spaceInSecondBucket){
+        int spaceInSecondBottle = bottleB.getSize() - bottleB.getContent();
+        if(bottleA.getContent() > spaceInSecondBottle){
 
-            int leftInFirstBucket = firstStep.getBottleAContent() - spaceInSecondBucket;
+            int leftInFirstBucket = bottleA.getContent() - spaceInSecondBottle;
 
-            secondStep = new State(new Bottle(BOTTLE_A_SIZE, leftInFirstBucket), new Bottle(BOTTLE_B_SIZE, BOTTLE_B_SIZE));
+            return new State(new Bottle(bottleA.getSize(), leftInFirstBucket), new Bottle(bottleB.getSize(), bottleB.getSize()));
         }
         else{
-            secondStep = new State(new Bottle(BOTTLE_A_SIZE), new Bottle(BOTTLE_B_SIZE, firstStep.getBottleAContent()));
+            return new State(new Bottle(bottleA.getSize()), new Bottle(bottleB.getSize(), bottleA.getContent()));
         }
 
-        return secondStep;
     }
 
 
-    //Step three
-    //If bottle B is full, empty it and fill from bottöe A
-    private State stepThree(State secondStep){
+    //Step four
+    //If bottle B is full, empty it, then transfer water from bottle A to B
+    private State stepFour(State step){
 
-        State thirdStep = null;
+        Bottle bottleA = step.getBottleA();
+        Bottle bottleB = step.getBottleB();
 
-        int spaceInBottleA = secondStep.getBottleA().getSize() - secondStep.getBottleAContent();
-        int leftInBottleB = secondStep.getBottleBContent() - spaceInBottleA;
+        int leftInBottleA = bottleA.getContent() - bottleB.getSize();
 
-        if(leftInBottleB > 0){
-            thirdStep = new State(new Bottle(BOTTLE_A_SIZE, BOTTLE_A_SIZE), new Bottle(BOTTLE_B_SIZE, leftInBottleB));
+        State state;
+
+        if(leftInBottleA > 0){
+            state = new State(new Bottle(bottleA.getSize(), leftInBottleA), new Bottle(bottleB.getSize(), bottleB.getSize()));
         }
         else{
-            int newBContent = secondStep.getBottleAContent() + secondStep.getBottleBContent()
-            thirdStep = new State(new Bottle(BOTTLE_A_SIZE, newBContent), new Bottle(BOTTLE_B_SIZE, 0));
+            int newBContent = bottleB.getSize() + leftInBottleA;
+            state = new State(new Bottle(bottleA.getSize()), new Bottle(bottleB.getSize(), newBContent));
         }
 
-        return thirdStep;
+
+        return state;
     }
 
 
 
-    //Creates new state if not already in list, and returns true. Otherwise returns false
-    private boolean createState(Bottle bottleA, Bottle bottleB, State previousStep){
+    private void addStep(State state){
 
-        if(!stateExists(bottleA.getContent(), bottleB.getContent())){
-            State tempState = new State(bottleA, bottleB);
-            tempState.addStep(previousStep);
-            return true;
+        if(!stepExists(state)){
+            stepList.add(state);
         }
 
-        return false;
     }
 
-    //Check if state is already in list
-    private boolean stateExists(int bottleAContent, int bottleBContent){
 
-        for(State state : stateList){
-            if(state.getBottleAContent() == bottleAContent && state.getBottleBContent() == bottleBContent){
+    private boolean stepExists(State step){
+
+        for(State state : stepList){
+            if(state.getBottleAContent() == step.getBottleAContent() && state.getBottleBContent() == step.getBottleBContent()){
                 return true;
             }
         }
 
         return false;
     }
-
 
 
     // Main method

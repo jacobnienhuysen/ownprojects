@@ -20,6 +20,10 @@ public class Bottle {
         return content;
     }
 
+    public void setContent(int content) {
+        this.content = content;
+    }
+
     public String toString(){
         return (SIZE + "-litersflaska som innehåller " + content + " liter vatten.");
     }
