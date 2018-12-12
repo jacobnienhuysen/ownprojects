@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * TODO 1: Se till att alla steg räknas korrekt. Glöm inte hällningar från en flaska till en annan i steg 4!
@@ -9,32 +10,54 @@ import java.util.ArrayList;
 
 public class BottleBattle {
 
+    //Bottle sizes
     private final int BOTTLE_A_SIZE = 5;
     private final int BOTTLE_B_SIZE = 3;
 
+    //Wanted amount of water
     private int wantedAmount = 0;
 
+    //List of necessary steps to reach goal
     private ArrayList<State> stepList = new ArrayList<>();
 
-    private void run(String wanted){
 
-        wantedAmount = Integer.parseInt(wanted);
+    private void run(){
 
-        System.out.println("Jag vill ha " + wanted);
+        //User input scanner
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Önskad mängd: ");
 
+        //Wanted amount input
+        wantedAmount = Integer.parseInt(scan.nextLine());
+
+        //Run algorithm twice. First 5-3 then 3-5.
         evaluate(init(true));
+        evaluate(init(false));
 
-        //evaluateSecondRound(init(false));
+        //Choose shortest path from the two
 
     }
 
+    /**
+     * Preparation before running algorithm
+     * Pass parameter true for first run and false for second run in order to switch bottle sizes.
+     *
+     * Clears step list and returns an empty state.
+     *
+     * @param firstRound
+     * @return State [0,0]
+     */
+
     private State init(boolean firstRound){
 
+        //Clear step list
         stepList.clear();
 
-        Bottle a = new Bottle(BOTTLE_A_SIZE, 0);
-        Bottle b = new Bottle(BOTTLE_B_SIZE, 0);
+        //Create empty bottles
+        Bottle a = new Bottle(BOTTLE_A_SIZE);
+        Bottle b = new Bottle(BOTTLE_B_SIZE);
 
+        //Return empty state
         if(firstRound){
             return new State(a, b);
         }
@@ -81,8 +104,13 @@ public class BottleBattle {
     }
 
 
-    //Step one
-    //If bottle A is empty, fill A, otherwise return state as is
+    /**
+     * Step one
+     * If bottle A is empty, fill A, otherwise return state as is
+     *
+     * @param step
+     * @return
+     */
     private State stepOne(State step){
 
         Bottle bottleA = step.getBottleA();
@@ -94,13 +122,17 @@ public class BottleBattle {
         else{
             return step;
         }
-
     }
 
 
 
-    //Step two
-    //Transfer water from bottle a to bottle b
+    /**
+     * Step two
+     * Transfer water from bottle a to bottle b
+     *
+     * @param step
+     * @return
+     */
     private State stepTwo(State step){
 
         Bottle bottleA = step.getBottleA();
@@ -120,9 +152,17 @@ public class BottleBattle {
     }
 
 
-    //Step four
-    //If bottle B is full, empty it, then transfer water from bottle A to B
+
+    /**
+     * Step four
+     * If bottle B is full, empty it, then transfer water from bottle A to B
+     *
+     * @param step
+     * @return
+     */
     private State stepFour(State step){
+
+        System.out.println("STEG fyra " + step);
 
         Bottle bottleA = step.getBottleA();
         Bottle bottleB = step.getBottleB();
@@ -144,38 +184,42 @@ public class BottleBattle {
     }
 
 
+    /**
+     * Add step to step list if not already present
+     *
+     * @param step
+     */
+    private void addStep(State step){
 
-    private void addStep(State state){
+        boolean stepExists = false;
 
-        if(!stepExists(state)){
-            stepList.add(state);
-        }
-
-    }
-
-
-    private boolean stepExists(State step){
-
+        //Loop through steps
         for(State state : stepList){
             if(state.getBottleAContent() == step.getBottleAContent() && state.getBottleBContent() == step.getBottleBContent()){
-                return true;
+                stepExists = true;
             }
         }
 
-        return false;
+        //If step is not yet in step list, add
+        if(!stepExists){
+            stepList.add(step);
+        }
+
     }
 
 
-    // Main method
+    /**
+     * Main method
+     *
+     * @param args
+     */
     public static void main(String[] args){
 
+        //Instantiate main class
         BottleBattle bottleBattle = new BottleBattle();
 
-        String wanted = "1";
-
-        bottleBattle.run(wanted);
-
-        //bottleBattle.run(args[0]);
+        //Run program
+        bottleBattle.run();
 
     }
 
