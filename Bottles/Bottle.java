@@ -20,6 +20,18 @@ public class Bottle {
         return content;
     }
 
+    public boolean isFull(){
+        return content == SIZE;
+    }
+
+    public boolean isEmpty(){
+        return content == 0;
+    }
+
+    public int getAvailableSpace(){
+        return SIZE - content;
+    }
+
     public String toString(){
         return (SIZE + "-litersflaska som innehåller " + content + " liter vatten.");
     }

@@ -4,10 +4,17 @@ public class State {
 
     private Bottle bottleA;
     private Bottle bottleB;
+    private State previousState;
 
     public State(Bottle bottleA, Bottle bottleB){
         this.bottleA = bottleA;
         this.bottleB = bottleB;
+        previousState = null;
+    }
+
+    public State(Bottle bottleA, Bottle bottleB, State previousState){
+        this(bottleA, bottleB);
+        this.previousState = previousState;
     }
 
 
@@ -29,6 +36,10 @@ public class State {
 
     public int getCurrentContent(){
         return getBottleAContent()+getBottleBContent();
+    }
+
+    public State getPreviousState(){
+        return previousState;
     }
 
     public String toString(){
