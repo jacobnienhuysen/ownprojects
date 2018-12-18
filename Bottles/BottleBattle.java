@@ -1,30 +1,15 @@
+package bottles;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
-/**
- * TODO 1: Se till att alla steg räknas korrekt. Glöm inte hällningar från en flaska till en annan i steg 4!
- * TODO 2: Kör båda alogritmerna efter varandra och returnera den med kortast väg!
- * TODO 3: Strukturera och kommentera!
- *
- */
 
 public class BottleBattle {
 
-    //Bottle sizes
+    //bottles.Bottle sizes
     private final int BOTTLE_A_SIZE = 5;
     private final int BOTTLE_B_SIZE = 3;
-
-    //Wanted amount of water
-    private int wantedAmount = 0;
-
-    //Lists of necessary steps to reach goal
-    private ArrayList<State> runOneResult = new ArrayList<>();
-    private ArrayList<State> runTwoResult = new ArrayList<>();
-
-    //Temporary list of steps
-    private ArrayList<State> stepList = new ArrayList<>();
 
     //Current state evaluated
     private State currentState = null;
@@ -32,72 +17,47 @@ public class BottleBattle {
     //Current state index
     private int currentIndex = 0;
 
-    //Remember if first run
-    boolean firstRun = true;
 
-    private void init(){
+    /**
+     * The BottleBattle starts here.
+     *
+     * Firstly, the algorithm is run twice to calculate all possible states.
+     * Thereafter the two resulting lists are analyzed to find the minimum amount of actions needed to obtain the wished amount of water.
+     * Finally, the result is returned as an integer.
+     *
+     * @param wantedAmount The wanted amount of water
+     * @return the minimum number of actions needed to reach wanted amount of water
+     */
 
-        //User input scanner
-        Scanner scan = new Scanner(System.in);
-
-        //Print message
-        System.out.print("Önskad mängd: ");
-
-        //Handle input
-        while(true) {
-            try {
-
-                //Wanted amount input
-                wantedAmount = Integer.parseInt(scan.nextLine());
-
-                //Check if not to large or small
-                if(wantedAmount < 0 || wantedAmount > 8){
-                    throw new IllegalArgumentException();
-                }
-
-                break;
-
-            }catch(NumberFormatException e){
-                System.out.println("Ogiltigt värde. Försök igen!");
-            }catch(IllegalArgumentException e){
-                System.out.println(wantedAmount + " går inte att räkna ut. Försök med en annan mängd.");
-            }
-
-            System.out.print("Önskad mängd: ");
-        }
+    public int run(int wantedAmount){
 
         //Run algorithm 5-3
-        run(firstRun);
-
-        //Change run switch to false, to denote second run
-        firstRun = false;
+        ArrayList<State> runOneResult = calculatePossibleSteps(true);
 
         //Run algorithm 3-5
-        run(firstRun);
+        ArrayList<State> runTwoResult = calculatePossibleSteps(false);
 
-        //Get lenght of shortest path
-        int shortestPathLength = shortestPath();
-
-        System.out.println("Minsta antalet steg som krävs: " + shortestPathLength);
+        //Get length of shortest path
+        return shortestPath(wantedAmount, runOneResult, runTwoResult);
 
     }
 
+
     /**
-     * Start algorithm.
-     * Temp step list is cleared.
-     * An initial state with empty bottles is created and added to temp step list.
-     * Current state is set to the empty state and current index is set to 0.
+     * The algorithm starts here.
      *
+     * An empty result list is created.
+     * currentState is set to an empty state which is also added to the result list.
      * Loop runs as long as there is an unevaluated state in list.
      *
      * Finally, the temp result list is returned.
      *
      */
 
-    private void run(boolean firstRun){
+    protected ArrayList<State> calculatePossibleSteps(boolean firstRun){
 
-        //Clear temporary step list
-        stepList.clear();
+        //Init new step list
+        ArrayList<State> stepList = new ArrayList<>();
 
         //Create first state
         currentState = createEmptyState(firstRun);
@@ -112,7 +72,7 @@ public class BottleBattle {
         while(currentState != null){
 
             //Evaluate state
-            evaluate(currentState);
+            evaluate(currentState, stepList);
 
             //Increase index counter
             currentIndex++;
@@ -128,13 +88,7 @@ public class BottleBattle {
             }
         }
 
-        if(firstRun){
-            runOneResult.addAll(stepList);
-        }
-        else{
-            runTwoResult.addAll(stepList);
-        }
-
+        return stepList;
     }
 
 
@@ -142,10 +96,10 @@ public class BottleBattle {
     /**
      * Create empty state
      *
-     * @return State with empty bottles.
+     * @return bottles.State with empty bottles.
      */
 
-    private State createEmptyState(boolean firstRun){
+    protected State createEmptyState(boolean firstRun){
 
         //Create empty bottles
         Bottle a = new Bottle(BOTTLE_A_SIZE);
@@ -160,25 +114,26 @@ public class BottleBattle {
         }
     }
 
+
     /**
      * Evaluate each state by passing it to the three steps.
      *
      * @param state
      */
 
-    private void evaluate(State state){
+    private void evaluate(State state, ArrayList<State> stepList){
 
         //Step one
         //Fill first bottle if empty
-        stepOne(state);
+        stepOne(state, stepList);
 
         //Step two
         //Fill second bottle from first
-        stepTwo(state);
+        stepTwo(state, stepList);
 
         //Step three
         //If second bottle is full, empty it and transfer water from first bottle
-        stepThree(state);
+        stepThree(state, stepList);
 
     }
 
@@ -189,7 +144,7 @@ public class BottleBattle {
      *
      * @param step
      */
-    private void stepOne(State step){
+    private void stepOne(State step, ArrayList<State> stepList){
 
         //Bottles of previous step
         Bottle bottleA = step.getBottleA();
@@ -197,12 +152,12 @@ public class BottleBattle {
 
         //If A is empty, fill A
         if(bottleA.getContent() == 0) {
-            addStep(new State(new Bottle(bottleA.getSize(), bottleA.getSize()), bottleB, step));
+            addStep(new State(new Bottle(bottleA.getSize(), bottleA.getSize()), bottleB, step), stepList);
         }
 
         //If B is empty, fill B
         if(bottleB.getContent() == 0) {
-            addStep(new State(bottleA, new Bottle(bottleB.getSize(), bottleB.getSize()), step));
+            addStep(new State(bottleA, new Bottle(bottleB.getSize(), bottleB.getSize()), step), stepList);
         }
 
     }
@@ -215,7 +170,7 @@ public class BottleBattle {
      *
      * @param step
      */
-    private void stepTwo(State step){
+    private void stepTwo(State step, ArrayList<State> stepList){
 
         //Bottles of previous step
         Bottle bottleA = step.getBottleA();
@@ -237,7 +192,7 @@ public class BottleBattle {
                 temp = new State(new Bottle(bottleA.getSize(), bottleB.getContent()), new Bottle(bottleB.getSize()), step);
             }
 
-            addStep(temp);
+            addStep(temp, stepList);
         }
 
         //If there is room in B and A is not empty, transfer to B
@@ -253,7 +208,7 @@ public class BottleBattle {
                 temp = new State(new Bottle(bottleA.getSize()), new Bottle(bottleB.getSize(), bottleA.getContent()), step);
             }
 
-            addStep(temp);
+            addStep(temp, stepList);
         }
 
     }
@@ -265,7 +220,7 @@ public class BottleBattle {
      * @param step
      */
 
-    private void stepThree(State step){
+    private void stepThree(State step, ArrayList<State> stepList){
 
         //Bottles from previous step
         Bottle bottleA = step.getBottleA();
@@ -276,7 +231,7 @@ public class BottleBattle {
 
             //Empty bottle A
             State temp = new State(new Bottle(bottleA.getSize()), bottleB, step);
-            addStep(temp);
+            addStep(temp, stepList);
 
             int leftInSecondBucket = bottleB.getContent() - bottleA.getAvailableSpace();
 
@@ -288,7 +243,7 @@ public class BottleBattle {
                 temp = new State(new Bottle(bottleA.getSize(), bottleB.getContent()), new Bottle(bottleB.getSize()), step);
             }
 
-            addStep(temp);
+            addStep(temp, stepList);
         }
 
         //If B is full
@@ -296,7 +251,7 @@ public class BottleBattle {
 
             //Empty bottle B
             State temp = new State(bottleA, new Bottle(bottleB.getSize()), step);
-            addStep(temp);
+            addStep(temp, stepList);
 
             int leftInSecondBucket = bottleA.getContent() - bottleB.getAvailableSpace();
 
@@ -308,8 +263,7 @@ public class BottleBattle {
                 temp = new State(new Bottle(bottleA.getSize()), new Bottle(bottleB.getSize(), bottleB.getContent()), step);
             }
 
-            addStep(temp);
-
+            addStep(temp, stepList);
         }
     }
 
@@ -319,7 +273,7 @@ public class BottleBattle {
      *
      * @param step
      */
-    private void addStep(State step){
+    private void addStep(State step, ArrayList<State> stepList){
 
         //If step is not yet in step list, add
         if(!stepExists(step, stepList)){
@@ -335,7 +289,7 @@ public class BottleBattle {
      * @param step
      * @param stepList
      */
-    private boolean stepExists(State step, ArrayList<State> stepList){
+    protected boolean stepExists(State step, ArrayList<State> stepList){
 
         //Loop through steps
         for(State state : stepList){
@@ -353,7 +307,7 @@ public class BottleBattle {
      *
      * @return minimum number of steps needed
      */
-    private int shortestPath(){
+    private int shortestPath(int wantedAmount, ArrayList<State> runOneResult, ArrayList<State> runTwoResult){
 
         //Create empty result map
         HashMap<State, ArrayList<State>> resultMap = new HashMap<>();
@@ -398,23 +352,6 @@ public class BottleBattle {
         }
 
         return shortestPath;
-    }
-
-
-
-    /**
-     * Main method
-     *
-     * @param args
-     */
-    public static void main(String[] args){
-
-        //Instantiate main class
-        BottleBattle bottleBattle = new BottleBattle();
-
-        //Run program
-        bottleBattle.init();
-
     }
 
 }

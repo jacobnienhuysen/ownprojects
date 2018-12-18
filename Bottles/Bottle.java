@@ -1,3 +1,5 @@
+package bottles;
+
 public class Bottle {
 
     private final int SIZE;
