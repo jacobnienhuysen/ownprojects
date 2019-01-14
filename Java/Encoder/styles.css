@@ -1,0 +1,17 @@
+.root {
+    -fx-background-color:rgb(237,41,57);
+}
+
+.label, .radio-button {
+    -fx-font-size:14pt;
+    -fx-text-fill:#FFFFFF;
+}
+
+.button {
+    -fx-font-size:14pt;
+}
+
+.vbox {
+    -fx-font-size:14pt;
+    -fx-padding: 10;
+}
