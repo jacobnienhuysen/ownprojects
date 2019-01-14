@@ -1,9 +1,10 @@
-import java.io.Serializable;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class Day implements Serializable{
+public class Day{
 
     private ArrayList<Session> sessionList;
     private LocalDateTime date;
@@ -17,10 +18,6 @@ public class Day implements Serializable{
         return date;
     }
 
-    public void setDate(LocalDateTime newDate){
-        date = newDate;
-    }
-
     public ArrayList<Session> getSessionList() {
         return sessionList;
     }
@@ -29,13 +26,13 @@ public class Day implements Serializable{
         sessionList.add(newSession);
     }
 
-    public double getTotalDuration(){
+    public Duration getTotalDuration(){
 
-        double totalDuration = 0;
+        Duration totalDuration = Duration.ZERO;
 
         if(!sessionList.isEmpty()) {
             for (Session s : sessionList) {
-                totalDuration += s.getDurationInSeconds();
+               totalDuration = totalDuration.plus(s.getCompleteDuration());
             }
         }
 

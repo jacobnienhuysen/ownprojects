@@ -1,12 +1,36 @@
 .root {
     -fx-font-size: 12pt;
-
 }
 
 #sessionStartCol, #sessionEndCol, #sessionDurationCol {
     -fx-alignment: CENTER;
 }
 
-#bottomBox {
+#newSessionBtn, #saveButton {
+    -fx-background-color:#7CAFC2;
+}
+
+#endBtn, #closeButton {
+    -fx-background-color:#AB4642;
+
+}
+
+.button:disabled {
+    -fx-text-fill:#888888;
+}
+
+#dayGrid {
+
+}
+
+#sessionGrid {
+    -fx-background-color:#FFFFFF;
+}
+
+.combo-box {
     -fx-font-size: 10pt;
+}
+
+#sessionTypeList {
+    -fx-font-size: 12pt;
 }

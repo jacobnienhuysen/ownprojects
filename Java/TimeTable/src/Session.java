@@ -1,9 +1,9 @@
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class Session implements Serializable{
+public class Session{
 
     private String sessionDescription;
     private LocalDateTime sessionStart;
@@ -22,11 +22,21 @@ public class Session implements Serializable{
         return sessionDescription;
     }
 
+    public void setDescription(String newDescription){
+        sessionDescription = newDescription;
+    }
+
 
     public LocalDateTime getSessionStart() {
         return sessionStart;
     }
 
+    public LocalDateTime getSessionEnd() {
+        if(active)
+            return LocalDateTime.now();
+        else
+            return sessionEnd;
+    }
 
     public String getSessionStartTime() {
 
@@ -48,17 +58,6 @@ public class Session implements Serializable{
     }
 
 
-    public long getDurationInSeconds(){
-
-        if(active) {
-            return Duration.between(sessionStart, LocalDateTime.now()).toSeconds();
-        }
-        else {
-            return Duration.between(sessionStart, sessionEnd).toSeconds();
-        }
-    }
-
-
     public String getDuration() {
 
         Duration d;
@@ -70,20 +69,21 @@ public class Session implements Serializable{
             d = Duration.between(sessionStart, sessionEnd);
         }
 
-        return d.toHoursPart() + ":" + d.toMinutesPart();
+        return d.toHoursPart() + ":" + String.format("%02d", d.toMinutesPart());
     }
 
-    public String getCompleteDuration(){
-        Duration d;
+
+    public Duration getCompleteDuration(){
+        Duration duration;
 
         if(active) {
-            d = Duration.between(sessionStart, LocalDateTime.now());
+            duration = Duration.between(sessionStart, LocalDateTime.now());
         }
         else {
-            d = Duration.between(sessionStart, sessionEnd);
+            duration = Duration.between(sessionStart, sessionEnd);
         }
 
-        return d.toHoursPart() + ":" + d.toMinutesPart() + ":" + d.toSecondsPart();
+        return duration;
 
     }
 
@@ -92,7 +92,25 @@ public class Session implements Serializable{
     public void setStart(LocalDateTime startTime){
         sessionStart=startTime;
     }
+    //REMOVE ABOVE
 
+    public void setStart(LocalTime startTime){
+        LocalDateTime newSessionStart = LocalDateTime.of(sessionStart.getYear(), sessionStart.getMonthValue(),sessionStart.getDayOfMonth(), startTime.getHour(),startTime.getMinute(),0);
+
+        if(!active && newSessionStart.isAfter(sessionEnd)){
+            throw new IllegalArgumentException("Session start time can not be after end time.");
+        }
+        else{
+
+            sessionStart = newSessionStart;
+
+        }
+
+    }
+
+    public boolean isActive(){
+        return active;
+    }
 
     public void setEnd(LocalDateTime endTime){
 
@@ -105,22 +123,37 @@ public class Session implements Serializable{
             throw new IllegalArgumentException("Session has already ended");
     }
 
+    public void setEnd(LocalTime endTime){
+        if(!active) {
+            LocalDateTime newSessionEnd = LocalDateTime.of(sessionEnd.getYear(), sessionEnd.getMonthValue(), sessionEnd.getDayOfMonth(), endTime.getHour(), endTime.getMinute(), 0);
+
+            if(newSessionEnd.isAfter(sessionStart)){
+                sessionEnd = newSessionEnd;
+            }
+            else{
+                throw new IllegalArgumentException("Session end time can not be before start time.");
+            }
+
+        }
+    }
+
 
     public String toString(){
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("YYYY-mm-dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        String temp = "";
+        String temp = sessionDescription + " - " + getSessionStartTime();
+
+        if (active){
+            temp += "-nu, ";
+        }
+        else{
+            temp += "-" + getSessionEndTime() + ", ";
+        }
 
         if(active){
-            temp = sessionStart.format(dateFormatter) + "\n";
-            temp += sessionDescription + "\n";
-            temp += sessionStart.format(timeFormatter) + " - nu";
+            temp += "(pågår)";
         }
         else {
-            temp = sessionStart.format(dateFormatter) + "\n";
-            temp += sessionDescription + ", " + (getDurationInSeconds()/3600) + "h\n";
-            temp += sessionStart.format(timeFormatter) + " - " + sessionEnd.format(timeFormatter) + "";
+            temp += "(" + getDuration() + ")";
         }
 
         return temp;
