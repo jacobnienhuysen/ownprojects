@@ -34,7 +34,7 @@ public class TimeTable extends Application {
 
 
     //Version number
-    private final double VERSION = 2.4;
+    private final String VERSION = "2.6.1";
 
 
     //GUI Components
@@ -357,6 +357,13 @@ public class TimeTable extends Application {
             sessionTable.refresh();
 
         }
+
+        //Ask if export
+
+        if(confirmAlert("Exportera dag?", "Vill du exportera dagens pass?", true)){
+            exportDay();
+        }
+
     }
 
 

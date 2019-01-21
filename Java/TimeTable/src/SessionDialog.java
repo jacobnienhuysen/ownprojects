@@ -1,7 +1,10 @@
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -164,6 +167,9 @@ public class SessionDialog {
         grid.setAlignment(Pos.BASELINE_CENTER);
         Scene scene = new Scene(grid);
 
+        //Add key listener to saveButton
+        setGlobalEventHandler(grid);
+
         //Add styling
         grid.getStylesheets().add("Styles.css");
 
@@ -313,6 +319,19 @@ public class SessionDialog {
     private boolean inTheFuture(LocalTime time){
 
         return time.isAfter(LocalTime.now());
+
+    }
+
+    //Enter key listener
+    private void setGlobalEventHandler(Node root){
+
+        root.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
+            if(ev.getCode() == KeyCode.ENTER){
+                if(!saveButton.isDisabled()) {
+                    saveButton.fire();
+                }
+            }
+        });
 
     }
 
