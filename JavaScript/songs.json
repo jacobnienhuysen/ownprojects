@@ -1,0 +1,72 @@
+var songdata = [
+	{
+		"id": 0,
+		"title": "Du har en gurka",
+		"artist": "Owe Thörnqvist"
+	},
+	{
+		"id": 1,
+		"title": "Impopular",
+		"artist": "Eric Spaade"
+	},
+	{
+		"id": 2,
+		"title": "On the mug",
+		"artist": "Danny Wikipedo"
+	},
+	{
+		"id": 3,
+		"title": "Dom, dom, dom",
+		"artist": "Tim och Toy"
+	},
+	{
+		"id": 4,
+		"title": "För en bugg får man faktiskt tåla",
+		"artist": "Letta Songberg"
+	},
+	{
+		"id": 5,
+		"title": "Djupt under havet",
+		"artist": "Glada Saijonmaa"
+	},
+	{
+		"id": 6,
+		"title": "HIV",
+		"artist": "Anna Took"
+	},
+	{
+		"id": 7,
+		"title": "Dansa ner i ån",
+		"artist": "Lena HP"
+	},
+	{
+		"id": 8,
+		"title": "Den skilda",
+		"artist": "One more rhyme"
+	},
+	{
+		"id": 9,
+		"title": "Stångad av en järngrind",
+		"artist": "Carl-Ola"
+	},
+	{
+		"id": 10,
+		"title": "Eld & Is",
+		"artist": "Lill Lundfors"
+	},
+	{
+		"id": 11,
+		"title": "Björnarna",
+		"artist": "Roger Borgare"
+	},
+	{
+		"id": 12,
+		"title": "Klamydia",
+		"artist": "Alkizar"
+	},
+	{
+		"id": 13,
+		"title": "Mans Zlatan-Löw",
+		"artist": "Kära Åke"
+	}
+];

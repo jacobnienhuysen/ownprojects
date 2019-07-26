@@ -1,0 +1,46 @@
+var jurydata = [
+	{
+		"id": 0,
+		"name": "Luleå"
+	},
+	{
+		"id": 1,
+		"name": "Umeå"
+	},
+	{
+		"id": 2,
+		"name": "Sundsvall"
+	},
+	{
+		"id": 3,
+		"name": "Falun"
+	},
+	{
+		"id": 4,
+		"name": "Karlstad"
+	},
+	{
+		"id": 5,
+		"name": "Örebro"
+	},
+	{
+		"id": 6,
+		"name": "Norrköping"
+	},
+	{
+		"id": 7,
+		"name": "Göteborg"
+	},
+	{
+		"id": 8,
+		"name": "Växjö"
+	},
+	{
+		"id": 9,
+		"name": "Malmö"
+	},
+	{
+		"id": 10,
+		"name": "Stockholm"
+	}
+];
